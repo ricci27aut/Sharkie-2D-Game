@@ -10,12 +10,11 @@ class Character extends MovableObject {
       `img/1.Sharkie/3.Swim/5.png`,
       `img/1.Sharkie/3.Swim/6.png`,
    ];
-   currentImage = 0;
 
 
    constructor() {
       super().loadImg('img/1.Sharkie/1.IDLE/1.png')
-       this.loadImges( this.Image_Swimming)
+      this.loadImges( this.Image_Swimming)
       this.animate();
    }
 
