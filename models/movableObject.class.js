@@ -10,10 +10,13 @@ class MovableObject{
       this.img.src = path;
    }
 
-   moveRight() { }
+   moveRight() {
+      this.character.x + 10;  
+   }
 
-   moveLeft() { }
-}
-
+   moveLeft() {
+      this.character.x - 10;
+   }
+};
 
 
