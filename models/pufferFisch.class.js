@@ -15,7 +15,7 @@ class PufferFisch extends MovableObject {
       super().loadImg(`img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png`)
       this.loadImges( this.Image_Swimming)
       this.y = Math.random() * 300;
-      this.moveLeft();
+      this.speed = 0.5 + Math.random() * 0.5; 
       this.animate();
    }
    animate() {
@@ -25,6 +25,7 @@ class PufferFisch extends MovableObject {
          this.img = this.imageCache[path];
          this.currentImage++;
       }, 10000 / 60);
+      this.moveLeft();
    };
  
 };
