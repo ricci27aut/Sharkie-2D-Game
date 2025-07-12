@@ -66,29 +66,30 @@ class Character extends MovableObject {
    animate() {
 
       setInterval(() => {
-         this.playAnimation(this.Image_Waiting)
-      }, 200);
+         if(!this.world.keyBindings.RIGHT && !this.world.keyBindings.LEFT){
+            this.playAnimation(this.Image_Waiting);}
+      }, 220);
 
       setInterval(() => {
          if (this.world.keyBindings.RIGHT && this.x < this.world.level.level_end_x) {
-            this.x += this.speed;
+            this.moveRight()
             this.otherDirection = false;
          }
          if (this.world.keyBindings.LEFT && this.x > 0) {
-            this.x -= this.speed;
-            this.otherDirection = true;
+           this.moveLeft()
+           this.otherDirection = true;
          }
 
-       
-         if (this.world.keyBindings.UP) {
+
+         if (this.world.keyBindings.SPACE && !this.isAboveGround()) {
             this.jump();
          }
-
+  
          this.world.camera_x = -this.x + 100;
       }, 1000 / 60);
 
       setInterval(() => {
-         if (this.world.keyBindings.RIGHT || this.world.keyBindings.LEFT || this.world.keyBindings.UP) {
+         if (this.world.keyBindings.RIGHT || this.world.keyBindings.LEFT || this.world.keyBindings.SPACE) {
             this.playAnimation(this.Image_Swimming)
          }
       }, 100);

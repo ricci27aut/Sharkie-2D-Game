@@ -25,9 +25,11 @@ class PufferFisch extends MovableObject {
          this.img = this.imageCache[path];
          this.currentImage++;
       }, 10000 / 60);
-      this.moveLeft();
-   };
- 
+
+      setInterval(() => {
+        this.moveLeft();
+      }, 1000 / 60);
+   }; 
 };
 
 

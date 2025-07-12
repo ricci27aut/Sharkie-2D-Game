@@ -1,4 +1,4 @@
-class Endboss extends MovableObject {
+class Endboss extends MovableObject{
 
   height = 380;
   width = 380;
@@ -29,9 +29,9 @@ class Endboss extends MovableObject {
 
   animate() {
     setInterval(() => {
+  
+        this.playAnimation(this.Image_Swimming)
 
-      this.playAnimation(this.Image_Swimming)
-
-    }, 100);
+    }, 10000 / 60);
   }
 }

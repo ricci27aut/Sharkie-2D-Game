@@ -1,7 +1,7 @@
 class World {
     character = new Character();
     endboss = new Endboss();
-    level = level1; 
+    level = level1;
     light = new Light;
     canvas;
     ctx;
@@ -28,7 +28,6 @@ class World {
         this.ctx.translate(this.camera_x, 0);
 
         this.addObjectsToMap(this.level.backgroundObjects);
-        this.addToMap(this.light);
         this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.character)
         this.addToMap(this.endboss)
@@ -43,21 +42,33 @@ class World {
 
     addObjectsToMap(objects) {
         objects.forEach(o => {
-            this.ctx.drawImage(o.img, o.x, o.y, o.width, o.height)
+            this.addToMap(o)
         })
     };
 
     addToMap(object) {
         if (object.otherDirection) {
-            this.ctx.save();
-            this.ctx.translate(object.width, 0);
-            this.ctx.scale(-1, 1); // Flip horizontally
-            object.x = object.x * -1
+            this.flipImage(object)
         }
-        this.ctx.drawImage(object.img, object.x, object.y, object.width, object.height)
+
+        object.draw(this.ctx);
+        object.drawHitBox(this.ctx)
+
+
         if (object.otherDirection) {
-            object.x = object.x * -1
-            this.ctx.restore(); // Restore the context to its original state
+            this.flipImageBack(object);
         }
     }
+
+      flipImage(object){
+       this.ctx.save();
+            this.ctx.translate(object.width, 0);
+           this.ctx.scale(-1, 1); // Flip horizontally
+            object.x = object.x * -1
+   }
+
+   flipImageBack(object){
+       object.x = object.x * -1
+            this.ctx.restore(); // Restore the context to its original state
+   }
 }

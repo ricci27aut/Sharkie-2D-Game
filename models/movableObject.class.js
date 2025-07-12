@@ -25,13 +25,15 @@ class MovableObject {
    }
 
    moveLeft() {
-      setInterval(() => {
-         this.x -= this.speed;
-      }, 1000 / 60);
+      this.x -= this.speed;
    }
 
-   jump(){
-      this.speedY += 20
+   moveRight() {
+      this.x += this.speed;
+   }
+
+   jump() {
+      this.speedY = 15
    }
 
    playAnimation(images) {
@@ -42,18 +44,32 @@ class MovableObject {
    }
 
    applyGravity() {
-     setInterval(() => {
+      setInterval(() => {
          if (this.isAboveGround() || this.speedY > 0) {
-           this.y -= this.speedY;
-         this.speedY -= this.acceleration;
+            this.y -= this.speedY;
+            this.speedY -= this.acceleration;
          }
-      }, 1000 / 25) 
+      }, 1000 / 25)
    }
 
    isAboveGround() {
       return this.y < 200;
    }
-}
 
+   draw(ctx) {
+      ctx.drawImage(this.img, this.x, this.y, this.width, this.height)
+   };
+
+   drawHitBox(ctx){
+
+      if(this instanceof Character || this instanceof PufferFisch || this instanceof Endboss){
+      ctx.beginPath();
+      ctx.lineWidth = "5";
+      ctx.strokeStyle = "blue";
+      ctx.rect(this.x, this.y, this.width, this.height);
+      ctx.stroke();
+   }
+};
+}
 
 
