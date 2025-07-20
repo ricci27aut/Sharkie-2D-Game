@@ -14,12 +14,23 @@ class World {
         this.keyBindings = keyBindings;
         this.draw();
         this.setWorld();
+        this.checkCollisions();
     }
 
 
     setWorld() {
         this.character.world = this;
     };
+
+    checkCollisions(){
+        setInterval(()=>{
+            this.level.enemies.forEach((enemy)=>{
+                if(this.character.isColliding(enemy)){
+                    this.character.hit();
+                }
+            });
+        },2000);
+    }
 
 
     draw() {
@@ -42,17 +53,17 @@ class World {
 
     addObjectsToMap(objects) {
         objects.forEach(o => {
-            this.addToMap(o)
+            this.addToMap(o);
         })
     };
 
     addToMap(object) {
         if (object.otherDirection) {
-            this.flipImage(object)
+            this.flipImage(object);
         }
 
         object.draw(this.ctx);
-        object.drawHitBox(this.ctx)
+        object.drawHitBox(this.ctx);
 
 
         if (object.otherDirection) {
@@ -60,15 +71,15 @@ class World {
         }
     }
 
-      flipImage(object){
-       this.ctx.save();
-            this.ctx.translate(object.width, 0);
-           this.ctx.scale(-1, 1); // Flip horizontally
-            object.x = object.x * -1
-   }
+    flipImage(object) {
+        this.ctx.save();
+        this.ctx.translate(object.width, 0);
+        this.ctx.scale(-1, 1); // Flip horizontally
+        object.x = object.x * -1
+    }
 
-   flipImageBack(object){
-       object.x = object.x * -1
-            this.ctx.restore(); // Restore the context to its original state
-   }
+    flipImageBack(object) {
+        object.x = object.x * -1
+        this.ctx.restore(); // Restore the context to its original state
+    }
 }

@@ -47,6 +47,28 @@ class Character extends MovableObject {
       'img/1.Sharkie/2.Long_IDLE/I13.png',
       'img/1.Sharkie/2.Long_IDLE/I14.png'
    ]
+
+   Image_Dead_Poisoned = [
+         'img/1.Sharkie/6.dead/1.Poisoned/1.png',
+         'img/1.Sharkie/6.dead/1.Poisoned/2.png',
+         'img/1.Sharkie/6.dead/1.Poisoned/3.png',
+         'img/1.Sharkie/6.dead/1.Poisoned/4.png',
+         'img/1.Sharkie/6.dead/1.Poisoned/5.png',
+         'img/1.Sharkie/6.dead/1.Poisoned/6.png',
+         'img/1.Sharkie/6.dead/1.Poisoned/7.png',
+         'img/1.Sharkie/6.dead/1.Poisoned/8.png',
+         'img/1.Sharkie/6.dead/1.Poisoned/9.png',
+         'img/1.Sharkie/6.dead/1.Poisoned/10.png',
+         'img/1.Sharkie/6.dead/1.Poisoned/11.png',
+         'img/1.Sharkie/6.dead/1.Poisoned/12.png',
+   ];
+
+    Image_Hurt_Poisoned = [
+      'img/1.Sharkie/5.Hurt/1.Poisoned/1.png',
+      'img/1.Sharkie/5.Hurt/1.Poisoned/2.png',
+      'img/1.Sharkie/5.Hurt/1.Poisoned/3.png',
+      'img/1.Sharkie/5.Hurt/1.Poisoned/4.png',
+    ]
    world;
 
 
@@ -56,6 +78,8 @@ class Character extends MovableObject {
       this.loadImges(this.Image_Swimming)
       this.loadImges(this.Image_Waiting)
       this.loadImges(this.Image_LongWaiting)
+      this.loadImges(this.Image_Dead_Poisoned)
+      this.loadImges(this.Image_Hurt_Poisoned)
       this.animate();
       this.applyGravity();
    }
@@ -89,7 +113,12 @@ class Character extends MovableObject {
       }, 1000 / 60);
 
       setInterval(() => {
-         if (this.world.keyBindings.RIGHT || this.world.keyBindings.LEFT || this.world.keyBindings.SPACE) {
+
+         if (this.isDead()) {
+             this.playAnimation(this.Image_Dead_Poisoned);
+         }else if(this.isHurt()){
+            this.playAnimation(this.Image_Hurt_Poisoned);
+         }else if (this.world.keyBindings.RIGHT || this.world.keyBindings.LEFT || this.world.keyBindings.SPACE) {
             this.playAnimation(this.Image_Swimming)
          }
       }, 100);
