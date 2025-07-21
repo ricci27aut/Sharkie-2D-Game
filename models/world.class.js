@@ -1,6 +1,7 @@
 class World {
     character = new Character();
     endboss = new Endboss();
+    statusBars = new StatusBars();
     level = level1;
     light = new Light;
     canvas;
@@ -22,14 +23,14 @@ class World {
         this.character.world = this;
     };
 
-    checkCollisions(){
-        setInterval(()=>{
-            this.level.enemies.forEach((enemy)=>{
-                if(this.character.isColliding(enemy)){
+    checkCollisions() {
+        setInterval(() => {
+            this.level.enemies.forEach((enemy) => {
+                if (this.character.isColliding(enemy)) {
                     this.character.hit();
                 }
             });
-        },2000);
+        }, 2000);
     }
 
 
@@ -42,6 +43,7 @@ class World {
         this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.character)
         this.addToMap(this.endboss)
+        this.addToMap(this.statusBars);
 
         this.ctx.translate(-this.camera_x, 0);
 

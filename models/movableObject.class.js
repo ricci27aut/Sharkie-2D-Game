@@ -1,30 +1,12 @@
-class MovableObject {
-   x = 720;
-   y = 200;
+class MovableObject extends DrawableOBjekt{
    speed = 0.5;
-   height = 100;
-   width = 150;
-   img;
-   imageCache = {};
-   currentImage = 0;
    otherDirection = false;
    speedY = 0;
    acceleration = 1;
    energy = 100;
    lastHit = 0;
 
-   loadImg(path) {
-      this.img = new Image();
-      this.img.src = path;
-   }
-
-   loadImges(arr) {
-      arr.forEach((path) => {
-         let img = new Image();
-         img.src = path;
-         this.imageCache[path] = img;
-      })
-   }
+  
 
    moveLeft() {
       this.x -= this.speed;
@@ -58,20 +40,6 @@ class MovableObject {
       return this.y < 200;
    }
 
-   draw(ctx) {
-      ctx.drawImage(this.img, this.x, this.y, this.width, this.height)
-   };
-
-   drawHitBox(ctx) {
-
-      if (this instanceof Character || this instanceof PufferFisch || this instanceof Endboss) {
-         ctx.beginPath();
-         ctx.lineWidth = "5";
-         ctx.strokeStyle = "blue";
-         ctx.rect(this.x, this.y, this.width, this.height);
-         ctx.stroke();
-      }
-   };
 
    isColliding(objekt) {
       return this.x + this.width > objekt.x &&
@@ -81,7 +49,7 @@ class MovableObject {
    }
 
    hit(){
-         this.energy -= 5
+         this.energy -= 20
        if (this.energy < 0) {
         this.energy = 0
       }else{
