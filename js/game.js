@@ -3,14 +3,17 @@ let canvas;
 let keyBindings = new KeyBindings();
 
 function init() {
-    canvas = document.getElementById("gameCanvas");
+    //startGame()
+    canvas = document.getElementById('gameCanvas');
     world = new World(canvas, keyBindings);
-
-    console.log('My Character', world.character);
 }
 
-window.addEventListener('keydown', (event) => { 
-    switch (event.keyCode){
+function startGame() {
+    document.getElementById('gameCanvas').classList.toggle('dnone');
+}
+
+window.addEventListener('keydown', (event) => {
+    switch (event.keyCode) {
         case 37:
             keyBindings.LEFT = true;
             break;
@@ -26,11 +29,14 @@ window.addEventListener('keydown', (event) => {
         case 40:
             keyBindings.DOWN = true;
             break;
+        case 68:
+            keyBindings.Attack = true;
+            break;
     }
 });
 
-window.addEventListener('keyup', (event) => { 
-    switch (event.keyCode){
+window.addEventListener('keyup', (event) => {
+    switch (event.keyCode) {
         case 37:
             keyBindings.LEFT = false;
             break;
@@ -45,6 +51,9 @@ window.addEventListener('keyup', (event) => {
             break;
         case 40:
             keyBindings.DOWN = false;
+            break;
+        case 68:
+            keyBindings.Attack = false;
             break;
     }
 });

@@ -20,13 +20,6 @@ class MovableObject extends DrawableOBjekt{
       this.speedY = 15
    }
 
-   playAnimation(images) {
-      let i = this.currentImage % images.length;
-      let path = images[i];
-      this.img = this.imageCache[path];
-      this.currentImage++;
-   }
-
    applyGravity() {
       setInterval(() => {
          if (this.isAboveGround() || this.speedY > 0) {
@@ -37,9 +30,12 @@ class MovableObject extends DrawableOBjekt{
    }
 
    isAboveGround() {
-      return this.y < 200;
+      if(this instanceof ThrowableObject){
+         return true;
+      }else{ 
+         return this.y < 200;
+      } 
    }
-
 
    isColliding(objekt) {
       return this.x + this.width > objekt.x &&
@@ -49,7 +45,7 @@ class MovableObject extends DrawableOBjekt{
    }
 
    hit(){
-         this.energy -= 20
+         this.energy -= 5
        if (this.energy < 0) {
         this.energy = 0
       }else{

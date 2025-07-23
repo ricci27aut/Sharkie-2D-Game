@@ -6,6 +6,7 @@ class DrawableOBjekt {
     y = 200;
     height = 100;
     width = 150;
+    
 
      loadImg(path) {
       this.img = new Image();
@@ -26,7 +27,7 @@ class DrawableOBjekt {
 
      drawHitBox(ctx) {
 
-      if (this instanceof Character || this instanceof PufferFisch || this instanceof Endboss) {
+      if (this instanceof Character || this instanceof PufferFisch || this instanceof Endboss || this instanceof PoisenIcon) {
          ctx.beginPath();
          ctx.lineWidth = "5";
          ctx.strokeStyle = "blue";
@@ -34,4 +35,34 @@ class DrawableOBjekt {
          ctx.stroke();
       }
    };
+
+   resolveImageIndex(percentage) {
+        if (percentage === 100) {
+            return 5;
+        } else if (percentage > 80) {
+            return 4;
+        } else if (percentage > 60) {
+            return 3;
+        } else if (percentage > 40) {
+            return 2;
+        } else if (percentage > 20) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+     setPercentage(percentage) {
+        this.percentage = percentage
+        let path = this.Images[this.resolveImageIndex(percentage)];
+        this.img = this.imageCache[path];
+    }
+
+    playAnimation(images) {
+      let i = this.currentImage % images.length;
+      let path = images[i];
+      this.img = this.imageCache[path];
+      this.currentImage++;
+   }
+
 }

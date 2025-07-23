@@ -68,7 +68,18 @@ class Character extends MovableObject {
       'img/1.Sharkie/5.Hurt/1.Poisoned/2.png',
       'img/1.Sharkie/5.Hurt/1.Poisoned/3.png',
       'img/1.Sharkie/5.Hurt/1.Poisoned/4.png',
-    ]
+    ];
+
+    Image_Attack = [
+      'img/1.Sharkie/4.Attack/Bubble trap/For Whale/1.png',
+      'img/1.Sharkie/4.Attack/Bubble trap/For Whale/2.png',
+      'img/1.Sharkie/4.Attack/Bubble trap/For Whale/3.png',
+      'img/1.Sharkie/4.Attack/Bubble trap/For Whale/4.png',
+      'img/1.Sharkie/4.Attack/Bubble trap/For Whale/5.png',
+      'img/1.Sharkie/4.Attack/Bubble trap/For Whale/6.png',
+      'img/1.Sharkie/4.Attack/Bubble trap/For Whale/7.png',
+      'img/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png',
+    ];
    world;
 
 
@@ -80,6 +91,7 @@ class Character extends MovableObject {
       this.loadImges(this.Image_LongWaiting)
       this.loadImges(this.Image_Dead_Poisoned)
       this.loadImges(this.Image_Hurt_Poisoned)
+      this.loadImges(this.Image_Attack)
       this.animate();
       this.applyGravity();
    }
@@ -103,8 +115,9 @@ class Character extends MovableObject {
            this.moveLeft()
            this.otherDirection = true;
          }
-
-
+         if (this.world.keyBindings.Attack) {
+            this.playAnimation(this.Image_Attack)
+         }
          if (this.world.keyBindings.SPACE && !this.isAboveGround()) {
             this.jump();
          }

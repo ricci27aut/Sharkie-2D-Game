@@ -4,4 +4,5 @@ class KeyBindings {
     SPACE = false;
     UP = false;
     DOWN = false;
+    Attack = false;
 }
