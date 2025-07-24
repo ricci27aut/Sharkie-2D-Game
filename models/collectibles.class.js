@@ -1,5 +1,28 @@
 class Coins extends DrawableOBjekt {
+width = 70;
+    height = 70;
 
+    Images = [
+        'img/4. Marcadores/1. Coins/1.png',
+        'img/4. Marcadores/1. Coins/2.png',
+        'img/4. Marcadores/1. Coins/3.png',
+        'img/4. Marcadores/1. Coins/4.png'
+    ]
+
+     constructor() {
+        super().loadImg('img/4. Marcadores/1. Coins/1.png')
+        this.loadImges(this.Images)
+        this.x = 100;
+        this.y = 120
+        this.animate()
+    }
+
+      animate() {
+        setInterval(() => {
+            this.playAnimation(this.Images);
+        },1000);
+
+    }
 }
 
 
@@ -17,12 +40,11 @@ class PoisenIcon extends DrawableOBjekt {
         super().loadImg('img/4. Marcadores/Posión/Dark - Left.png')
         this.loadImges(this.Images)
         this.x = this.getRandamX();
-        this.x = this.x
         this.y = 320
         this.animate()
     }
 
-    animate() {
+       animate() {
         setInterval(() => {
             this.playAnimation(this.Images);
         },1000);

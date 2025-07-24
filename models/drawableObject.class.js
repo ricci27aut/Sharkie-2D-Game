@@ -27,7 +27,7 @@ class DrawableOBjekt {
 
      drawHitBox(ctx) {
 
-      if (this instanceof Character || this instanceof PufferFisch || this instanceof Endboss || this instanceof PoisenIcon) {
+      if (this instanceof Character || this instanceof PufferFisch || this instanceof Endboss || this instanceof PoisenIcon || this instanceof ThrowableObject) {
          ctx.beginPath();
          ctx.lineWidth = "5";
          ctx.strokeStyle = "blue";
@@ -39,13 +39,13 @@ class DrawableOBjekt {
    resolveImageIndex(percentage) {
         if (percentage === 100) {
             return 5;
-        } else if (percentage > 80) {
+        } else if (percentage >= 80) {
             return 4;
-        } else if (percentage > 60) {
+        } else if (percentage >= 60) {
             return 3;
-        } else if (percentage > 40) {
+        } else if (percentage >=  40) {
             return 2;
-        } else if (percentage > 20) {
+        } else if (percentage >=  20) {
             return 1;
         } else {
             return 0;

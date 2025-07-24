@@ -1,4 +1,4 @@
-class MovableObject extends DrawableOBjekt{
+class MovableObject extends DrawableOBjekt {
    speed = 0.5;
    otherDirection = false;
    speedY = 0;
@@ -6,7 +6,7 @@ class MovableObject extends DrawableOBjekt{
    energy = 100;
    lastHit = 0;
 
-  
+
 
    moveLeft() {
       this.x -= this.speed;
@@ -30,30 +30,38 @@ class MovableObject extends DrawableOBjekt{
    }
 
    isAboveGround() {
-      if(this instanceof ThrowableObject){
+      if (this instanceof ThrowableObject) {
          return true;
-      }else{ 
+      } else {
          return this.y < 200;
-      } 
+      }
    }
+
+   isCollidingWithAny(objektArray) {
+      return objektArray.some(obj => this.isColliding(obj));
+   }
+
 
    isColliding(objekt) {
-      return this.x + this.width > objekt.x &&
-         this.y + this.height > objekt.y &&
-         this.x < objekt.x &&
-         this.y < objekt.y + objekt.height
+      return this.x < objekt.x + objekt.width &&
+         this.x + this.width > objekt.x &&
+         this.y < objekt.y + objekt.height &&
+         this.y + this.height > objekt.y;
    }
 
-   hit(){
-         this.energy -= 5
-       if (this.energy < 0) {
-        this.energy = 0
-      }else{
-         this.lastHit = new Date().getTime();
-      }   
+   hit() {
+      if (this.isHurt()) return; // Noch in Cooldown → kein neuer Schaden
+
+      this.energy -= 20;
+
+      if (this.energy < 0) {
+         this.energy = 0;
+      } else {
+         this.lastHit = new Date().getTime(); // Cooldown starten
+      }
    }
 
-   isDead(){
+   isDead() {
       return this.energy == 0;
    }
 

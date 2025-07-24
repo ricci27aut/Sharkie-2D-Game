@@ -115,7 +115,7 @@ class Character extends MovableObject {
            this.moveLeft()
            this.otherDirection = true;
          }
-         if (this.world.keyBindings.Attack) {
+         if (this.world.keyBindings.Attack && this.world.shots) {
             this.playAnimation(this.Image_Attack)
          }
          if (this.world.keyBindings.SPACE && !this.isAboveGround()) {

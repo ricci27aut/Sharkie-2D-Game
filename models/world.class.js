@@ -9,7 +9,11 @@ class World {
     ]
 
     poisenIcon = [new PoisenIcon(),
-        new PoisenIcon()
+        new PoisenIcon(),  
+        new PoisenIcon(),
+        new PoisenIcon(),
+        new PoisenIcon(),
+        new Coins(),
     ];
 
     throwabelObject = []
@@ -19,6 +23,9 @@ class World {
     ctx;
     keyBindings;
     camera_x = 0;
+    shots = 0;
+    canThrow = true;
+    
 
     constructor(canvas, keyBindings) {
         this.ctx = canvas.getContext("2d");
@@ -32,45 +39,66 @@ class World {
 
     setWorld() {
         this.character.world = this;
+        this.endboss.world = this
     };
 
     run() {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
-            this.checkItem();
-        }, 200);
+            this.checkPoisenItem();
+            this.checkCoinItem();
+        }, 10);
     }
 
     checkCollisions() {
-        this.level.enemies.forEach((enemy) => {
+        this.level.enemies.forEach((enemy, index) => {
             if (this.character.isColliding(enemy)) {
                 this.character.hit();
                 this.statusBars[0].setPercentage(this.character.energy);
+            }else if (this.endboss.isCollidingWithAny(this.throwabelObject)){
+                this.endboss.hit();
+            }else if (enemy.isCollidingWithAny(this.throwabelObject)){
+                enemy.hit();
+                setTimeout(() => {
+        this.level.enemies.splice(index, 1);
+      }, 1000);
             }
         });
     }
 
-    checkItem(){
+    checkPoisenItem(){
         this.poisenIcon.forEach((item, index)=>{
-            if (this.character.isColliding(item)) {
-                this.poisenIcon.splice(index,1);
-                console.log(this.statusBars[1].percentage)
-                this.statusBars[1].percentage += 10;
-                this.ThrowableObject.shots += 10
-                console.log(this.statusBars[1].percentage)
-                this.statusBars[1].setPercentage(this.character.energy);
+            if (this.character.isColliding(item) && item instanceof PoisenIcon) {
+                this.poisenIcon.splice(index,1);        
+                this.shots += 20;
+            this.statusBars[1].setPercentage(this.shots);
             }
         })
     }
 
     checkThrowObjects() {
-        if (this.keyBindings.Attack) {
-            let bubble = new ThrowableObject(this.character.x + 100, this.character.y + 100)
-            this.throwabelObject.push(bubble);
-        }
-    }
+    if (this.keyBindings.Attack && this.shots > 0 && this.canThrow) {
+      let bubble = new ThrowableObject(this.character.x + 100, this.character.y + 100, this);
+      this.throwabelObject.push(bubble);
+      bubble.throw(this.shots);
 
+      this.canThrow = false;  // Cooldown starten
+      setTimeout(() => {
+        this.canThrow = true;  // Nach 1 Sekunde wieder erlauben
+      }, 1000);
+    }
+  }
+
+    checkCoinItem(){
+         this.poisenIcon.forEach((item, index)=>{
+            if (this.character.isColliding(item) && item instanceof Coins) {
+                this.poisenIcon.splice(index,1);        
+                this.statusBars[2].percentage += 20;
+                 this.statusBars[2].setPercentage(this.statusBars[2].percentage);
+            }
+        })
+    }
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
