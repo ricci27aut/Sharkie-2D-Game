@@ -1,6 +1,7 @@
 class World {
     character = new Character();
     endboss = new Endboss();
+    endScreen = new EndScreen()
 
     statusBars = [
         new StatusBars(),
@@ -9,11 +10,11 @@ class World {
     ]
 
     poisenIcon = [new PoisenIcon(),
-        new PoisenIcon(),  
-        new PoisenIcon(),
-        new PoisenIcon(),
-        new PoisenIcon(),
-        new Coins(),
+    new PoisenIcon(),
+    new PoisenIcon(),
+    new PoisenIcon(),
+    new PoisenIcon(),
+    new Coins(),
     ];
 
     throwabelObject = []
@@ -25,7 +26,8 @@ class World {
     camera_x = 0;
     shots = 0;
     canThrow = true;
-    
+    isGameRunning = true;
+
 
     constructor(canvas, keyBindings) {
         this.ctx = canvas.getContext("2d");
@@ -40,6 +42,7 @@ class World {
     setWorld() {
         this.character.world = this;
         this.endboss.world = this
+        this.endScreen.world = this
     };
 
     run() {
@@ -53,49 +56,49 @@ class World {
 
     checkCollisions() {
         this.level.enemies.forEach((enemy, index) => {
-            if (this.character.isColliding(enemy)) {
+            if (this.character.isColliding(enemy) || this.character.isColliding(this.endboss)) {
                 this.character.hit();
                 this.statusBars[0].setPercentage(this.character.energy);
-            }else if (this.endboss.isCollidingWithAny(this.throwabelObject)){
+            } else if (this.endboss.isCollidingWithAny(this.throwabelObject)) {
                 this.endboss.hit();
-            }else if (enemy.isCollidingWithAny(this.throwabelObject)){
+            } else if (enemy.isCollidingWithAny(this.throwabelObject)) {
                 enemy.hit();
                 setTimeout(() => {
-        this.level.enemies.splice(index, 1);
-      }, 1000);
+                    this.level.enemies.splice(index, 1);
+                }, 1000);
             }
         });
     }
 
-    checkPoisenItem(){
-        this.poisenIcon.forEach((item, index)=>{
+    checkPoisenItem() {
+        this.poisenIcon.forEach((item, index) => {
             if (this.character.isColliding(item) && item instanceof PoisenIcon) {
-                this.poisenIcon.splice(index,1);        
+                this.poisenIcon.splice(index, 1);
                 this.shots += 20;
-            this.statusBars[1].setPercentage(this.shots);
+                this.statusBars[1].setPercentage(this.shots);
             }
         })
     }
 
     checkThrowObjects() {
-    if (this.keyBindings.Attack && this.shots > 0 && this.canThrow) {
-      let bubble = new ThrowableObject(this.character.x + 100, this.character.y + 100, this);
-      this.throwabelObject.push(bubble);
-      bubble.throw(this.shots);
+        if (this.keyBindings.Attack && this.shots > 0 && this.canThrow) {
+            let bubble = new ThrowableObject(this.character.x + 100, this.character.y + 100, this);
+            this.throwabelObject.push(bubble);
+            bubble.throw(this.shots);
 
-      this.canThrow = false;  // Cooldown starten
-      setTimeout(() => {
-        this.canThrow = true;  // Nach 1 Sekunde wieder erlauben
-      }, 1000);
+            this.canThrow = false;  // Cooldown starten
+            setTimeout(() => {
+                this.canThrow = true;  // Nach 1 Sekunde wieder erlauben
+            }, 1000);
+        }
     }
-  }
 
-    checkCoinItem(){
-         this.poisenIcon.forEach((item, index)=>{
+    checkCoinItem() {
+        this.poisenIcon.forEach((item, index) => {
             if (this.character.isColliding(item) && item instanceof Coins) {
-                this.poisenIcon.splice(index,1);        
+                this.poisenIcon.splice(index, 1);
                 this.statusBars[2].percentage += 20;
-                 this.statusBars[2].setPercentage(this.statusBars[2].percentage);
+                this.statusBars[2].setPercentage(this.statusBars[2].percentage);
             }
         })
     }
@@ -120,9 +123,9 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
 
         self = this;
-        requestAnimationFrame(function () {
-            self.draw();
-        });
+        if (self.isGameRunning) {
+            requestAnimationFrame(() => self.draw());
+        }
     }
 
     addObjectsToMap(objects) {

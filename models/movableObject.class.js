@@ -50,7 +50,7 @@ class MovableObject extends DrawableOBjekt {
    }
 
    hit() {
-      if (this.isHurt()) return; // Noch in Cooldown → kein neuer Schaden
+      if (this.coolDown()) return; // Noch in Cooldown → kein neuer Schaden
 
       this.energy -= 20;
 
@@ -65,7 +65,7 @@ class MovableObject extends DrawableOBjekt {
       return this.energy == 0;
    }
 
-   isHurt() {
+   coolDown() {
       let timePassed = new Date().getTime() - this.lastHit;// difference in ms
       timePassed = timePassed / 1000 // difference in s
       return timePassed < 1;

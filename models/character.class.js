@@ -129,7 +129,8 @@ class Character extends MovableObject {
 
          if (this.isDead()) {
              this.playAnimation(this.Image_Dead_Poisoned);
-         }else if(this.isHurt()){
+             this.world.endScreen.showGameLose();
+         }else if(this.coolDown()){
             this.playAnimation(this.Image_Hurt_Poisoned);
          }else if (this.world.keyBindings.RIGHT || this.world.keyBindings.LEFT || this.world.keyBindings.SPACE) {
             this.playAnimation(this.Image_Swimming)
