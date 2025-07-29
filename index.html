@@ -11,28 +11,34 @@
     <script src="../models/keyBindings.class.js"></script>
     <script src="../js/game.js"></script>
     <script src="../models/endscreen.class.js"></script>
+    <script src="../levels/level1.js"></script>
     <script src="../models/pufferFisch.class.js"></script>
     <script src="../models/light.class.js"></script>
     <script src="../models/background-objekt.class.js"></script>
     <script src="../models/character.class.js"></script>
     <script src="../models/levels.class.js"></script>
     <script src="../models/bars.class.js"></script>
-    <script src="../levels/level1.js"></script>
     <script src="../models/EndBoss.class.js"></script>
     <script src="../models/ThrowableObject.class.js"></script>
-     <script src="../models/collectibles.class.js"></script>
+    <script src="../models/collectibles.class.js"></script>
     <script src="../models/world.class.js"></script>
+    <script src="../js/templates.js"></script>
 </head>
 
-<body>
+
+<body class="flex-center" onclick="removeOverlay()">
 
     <h1>Welcome to Sharki</h1>
 
-    
-    <div>
-        <img onclick="init()" src="img/6.Botones/Start/3.png">
+
+    <div class="flex-center-space padding-bottom-20px">
+        <img class="icon-style-settings animation" onclick="event.stopPropagation(); getOverlay(1)" src="img/7.UserFeedback/icons8-settings-500.png">
+        <img id="startButton" class="icon-style-start animation" onclick="init()" src="img/6.Botones/Start/3.png">
+        <img id="reloadButton" class="dnone icon-style-start animation" onclick="reload()" src="img/6.Botones/Try again/Recurso 15.png">
+        <img class="icon-style-Feedback animation" onclick="event.stopPropagation(); getOverlay(2)" src="img/7.UserFeedback/icons8-siehe-handbuch-100.png">
     </div>
-    <canvas id="gameCanvas" width="720" height="480"></canvas>
+    <div id="overlay" class="overlay-div flex-center dnone"></div>
+    <canvas id="gameCanvas" class="dnone" width="720" height="480"></canvas>
 </body>
 
 </html>

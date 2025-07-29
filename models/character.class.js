@@ -3,6 +3,8 @@ class Character extends MovableObject {
    width = 220;
    x = 120;
    speed = 5;
+   lastTailAttack = 0;
+   waiting = 0;
 
    Image_Swimming = [
       `img/1.Sharkie/3.Swim/2.png`,
@@ -32,7 +34,7 @@ class Character extends MovableObject {
       'img/1.Sharkie/1.IDLE/18.png'
    ];
 
-   Image_LongWaiting = [
+   Image_Long_Waiting = [
       'img/1.Sharkie/2.Long_IDLE/I2.png',
       'img/1.Sharkie/2.Long_IDLE/I3.png',
       'img/1.Sharkie/2.Long_IDLE/I4.png',
@@ -49,28 +51,28 @@ class Character extends MovableObject {
    ]
 
    Image_Dead_Poisoned = [
-         'img/1.Sharkie/6.dead/1.Poisoned/1.png',
-         'img/1.Sharkie/6.dead/1.Poisoned/2.png',
-         'img/1.Sharkie/6.dead/1.Poisoned/3.png',
-         'img/1.Sharkie/6.dead/1.Poisoned/4.png',
-         'img/1.Sharkie/6.dead/1.Poisoned/5.png',
-         'img/1.Sharkie/6.dead/1.Poisoned/6.png',
-         'img/1.Sharkie/6.dead/1.Poisoned/7.png',
-         'img/1.Sharkie/6.dead/1.Poisoned/8.png',
-         'img/1.Sharkie/6.dead/1.Poisoned/9.png',
-         'img/1.Sharkie/6.dead/1.Poisoned/10.png',
-         'img/1.Sharkie/6.dead/1.Poisoned/11.png',
-         'img/1.Sharkie/6.dead/1.Poisoned/12.png',
+      'img/1.Sharkie/6.dead/1.Poisoned/1.png',
+      'img/1.Sharkie/6.dead/1.Poisoned/2.png',
+      'img/1.Sharkie/6.dead/1.Poisoned/3.png',
+      'img/1.Sharkie/6.dead/1.Poisoned/4.png',
+      'img/1.Sharkie/6.dead/1.Poisoned/5.png',
+      'img/1.Sharkie/6.dead/1.Poisoned/6.png',
+      'img/1.Sharkie/6.dead/1.Poisoned/7.png',
+      'img/1.Sharkie/6.dead/1.Poisoned/8.png',
+      'img/1.Sharkie/6.dead/1.Poisoned/9.png',
+      'img/1.Sharkie/6.dead/1.Poisoned/10.png',
+      'img/1.Sharkie/6.dead/1.Poisoned/11.png',
+      'img/1.Sharkie/6.dead/1.Poisoned/12.png',
    ];
 
-    Image_Hurt_Poisoned = [
+   Image_Hurt_Poisoned = [
       'img/1.Sharkie/5.Hurt/1.Poisoned/1.png',
       'img/1.Sharkie/5.Hurt/1.Poisoned/2.png',
       'img/1.Sharkie/5.Hurt/1.Poisoned/3.png',
       'img/1.Sharkie/5.Hurt/1.Poisoned/4.png',
-    ];
+   ];
 
-    Image_Attack = [
+   Image_Attack = [
       'img/1.Sharkie/4.Attack/Bubble trap/For Whale/1.png',
       'img/1.Sharkie/4.Attack/Bubble trap/For Whale/2.png',
       'img/1.Sharkie/4.Attack/Bubble trap/For Whale/3.png',
@@ -79,7 +81,18 @@ class Character extends MovableObject {
       'img/1.Sharkie/4.Attack/Bubble trap/For Whale/6.png',
       'img/1.Sharkie/4.Attack/Bubble trap/For Whale/7.png',
       'img/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png',
-    ];
+   ];
+
+   Image_Attack_Tail = [
+      'img/1.Sharkie/4.Attack/Fin slap/1.png',
+      'img/1.Sharkie/4.Attack/Fin slap/2.png',
+      'img/1.Sharkie/4.Attack/Fin slap/3.png',
+      'img/1.Sharkie/4.Attack/Fin slap/4.png',
+      'img/1.Sharkie/4.Attack/Fin slap/5.png',
+      'img/1.Sharkie/4.Attack/Fin slap/6.png',
+      'img/1.Sharkie/4.Attack/Fin slap/7.png',
+      'img/1.Sharkie/4.Attack/Fin slap/8.png',
+   ];
    world;
 
 
@@ -88,10 +101,11 @@ class Character extends MovableObject {
       super().loadImg('img/1.Sharkie/1.IDLE/1.png')
       this.loadImges(this.Image_Swimming)
       this.loadImges(this.Image_Waiting)
-      this.loadImges(this.Image_LongWaiting)
+      this.loadImges(this.Image_Long_Waiting)
       this.loadImges(this.Image_Dead_Poisoned)
       this.loadImges(this.Image_Hurt_Poisoned)
       this.loadImges(this.Image_Attack)
+      this.loadImges(this.Image_Attack_Tail)
       this.animate();
       this.applyGravity();
    }
@@ -102,9 +116,10 @@ class Character extends MovableObject {
    animate() {
 
       setInterval(() => {
-         if(!this.world.keyBindings.RIGHT && !this.world.keyBindings.LEFT){
-            this.playAnimation(this.Image_Waiting);}
-      }, 220);
+         if (!this.world.keyBindings.RIGHT && !this.world.keyBindings.LEFT) {
+            this.playAnimation(this.Image_Waiting);
+         }
+      }, 200);
 
       setInterval(() => {
          if (this.world.keyBindings.RIGHT && this.x < this.world.level.level_end_x) {
@@ -112,29 +127,57 @@ class Character extends MovableObject {
             this.otherDirection = false;
          }
          if (this.world.keyBindings.LEFT && this.x > 0) {
-           this.moveLeft()
-           this.otherDirection = true;
+            this.moveLeft()
+            this.otherDirection = true;
          }
          if (this.world.keyBindings.Attack && this.world.shots) {
             this.playAnimation(this.Image_Attack)
          }
+         if (this.world.keyBindings.AttackTail && this.canAttackTail()) {
+            this.lastTailAttack = new Date().getTime(); // Zeit merken
+            this.playAnimation(this.Image_Attack_Tail);
+         }
          if (this.world.keyBindings.SPACE && !this.isAboveGround()) {
             this.jump();
          }
-  
+
          this.world.camera_x = -this.x + 100;
-      }, 1000 / 60);
+      }, 900 / 60);
 
       setInterval(() => {
 
          if (this.isDead()) {
-             this.playAnimation(this.Image_Dead_Poisoned);
-             this.world.endScreen.showGameLose();
-         }else if(this.coolDown()){
+            this.playAnimation(this.Image_Dead_Poisoned);
+            this.world.endScreen.showGameLose();
+         } else if (this.coolDown()) {
             this.playAnimation(this.Image_Hurt_Poisoned);
-         }else if (this.world.keyBindings.RIGHT || this.world.keyBindings.LEFT || this.world.keyBindings.SPACE) {
+         } else if (this.world.keyBindings.RIGHT || this.world.keyBindings.LEFT || this.world.keyBindings.SPACE) {
             this.playAnimation(this.Image_Swimming)
          }
       }, 100);
+   }
+
+   isColliding(objekt) {
+      const offsetX = 10;
+      const offsetY = 100;
+      const hitboxWidth = this.width - 50;
+      const hitboxHeight = this.height - 130;
+
+      return this.x + offsetX < objekt.x + objekt.width &&
+         this.x + offsetX + hitboxWidth > objekt.x &&
+         this.y + offsetY < objekt.y + objekt.height &&
+         this.y + offsetY + hitboxHeight > objekt.y;
+   }
+
+   canAttackTail() {
+      const now = new Date().getTime();
+      return (now - this.lastTailAttack) > 2000; // 3 Sekunden Cooldown
+   }
+
+   
+   coolDownWaiting() {
+      let timePassed = new Date().getTime() - this.waiting;// difference in ms
+      timePassed = timePassed / 1000 // difference in s
+      return timePassed < 10;
    }
 }

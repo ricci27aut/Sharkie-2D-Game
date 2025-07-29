@@ -4,19 +4,23 @@ let keyBindings = new KeyBindings();
 let controlsActive = true;
 
 function init() {
-    //startGame()
+    removeOverlay()
+    startGame()
+    initLevel()
     canvas = document.getElementById('gameCanvas');
     world = new World(canvas, keyBindings);
+    
 }
 
 function startGame() {
     document.getElementById('gameCanvas').classList.toggle('dnone');
+    chanceButten();
 }
 
-function disableControls(t){
+function disableControls(t) {
     controlsActive = false;
 
-     setTimeout(() => controlsActive = true, t);
+    setTimeout(() => controlsActive = true, t);
 }
 
 window.addEventListener('keydown', (event) => {
@@ -42,6 +46,9 @@ window.addEventListener('keydown', (event) => {
         case 68:
             keyBindings.Attack = true;
             break;
+        case 70:
+            keyBindings.AttackTail = true;
+            break;
     }
 });
 
@@ -65,5 +72,52 @@ window.addEventListener('keyup', (event) => {
         case 68:
             keyBindings.Attack = false;
             break;
+        case 70:
+            keyBindings.AttackTail = false;
+            break;
     }
 });
+
+function getOverlay(i) {
+    overlayRef = document.getElementById('overlay');
+    if (!overlay.classList.contains('dnone')) {
+        removeOverlay()
+        return
+    }
+    overlayRef.innerHTML = "" 
+    content = withContent(i);
+    overlayRef.innerHTML = content;
+    overlayRef.classList.toggle('dnone');
+}
+
+function withContent(i) {
+    if (i === 1) {
+        return settings();
+    }
+    if (i === 2) {
+        return guide();
+    }
+}
+
+function removeOverlay() {
+    const overlay = document.getElementById('overlay');
+    if (!overlay.classList.contains('dnone')) {
+        overlay.innerHTML = "";
+        overlay.classList.add('dnone');
+    }
+}
+
+function chanceButten() {
+    document.getElementById('reloadButton').classList.remove('dnone')
+    document.getElementById('startButton').classList.add('dnone')
+}
+
+function reload() {
+    window.location.reload();
+}
+
+document.querySelector('.icon-style-Feedback').addEventListener('click', function(event) {
+    event.stopPropagation(); // verhindert removeOverlay()
+    getOverlay(3);
+});
+

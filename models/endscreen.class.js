@@ -1,5 +1,8 @@
-class EndScreen extends DrawableOBjekt{
-
+class EndScreen extends DrawableOBjekt {
+     img;
+    imageCache = {};
+    currentImage = 0;
+    
     Images_Game_lose = [
         'img/6.Botones/Tittles/Game Over/Recurso 9.png',
         'img/6.Botones/Tittles/Game Over/Recurso 10.png',
@@ -11,9 +14,10 @@ class EndScreen extends DrawableOBjekt{
     world;
 
 
-    constructor(){
+    constructor() {
         super();
-        this.loadImges(this.Images_Game_lose)
+        this.loadImg('img/6.Botones/Tittles/Game Over/Recurso 9.png')
+
     }
 
 
@@ -26,9 +30,19 @@ class EndScreen extends DrawableOBjekt{
         this.world.ctx.drawImage(img, 0, 0, this.world.canvas.width, this.world.canvas.height);
     }
 
+
     showGameLose() {
         this.world.ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.world.isGameRunning = false
-        this.playAnimation(this.Images_Game_lose)
+        setInterval(() => {
+        this.playAnimation(this.Images_Game_lose) }, 100);
+    }
+
+    playAnimation(images) {
+        let i = this.currentImage % images.length;
+        let path = images[i];
+        this.world.DrawableOBjekt.img = this.world.DrawableOBjekt.imageCache[path];
+        this.currentImage++;
+        this.world.ctx.drawImage(this.world.DrawableOBjekt.img, this.x, this.y, this.width, this.height)
     }
 }

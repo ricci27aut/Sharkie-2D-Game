@@ -2,7 +2,7 @@ class ThrowableObject extends MovableObject {
     speedY = 10;
     height = 40;
     width = 40;
-    speed = 10
+    speed = 10;
 
     constructor(x, y) {
         super();
@@ -26,7 +26,7 @@ class ThrowableObject extends MovableObject {
             return;
         } 
         if (this.world.keyBindings.RIGHT) {
-            this.speed = 30;
+            this.speed = 18;
         }
             this.world.shots -= 20;
             this.world.statusBars[1].setPercentage(this.world.shots);

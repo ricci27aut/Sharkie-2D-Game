@@ -1,20 +1,30 @@
 class World {
     character = new Character();
     endboss = new Endboss();
-    endScreen = new EndScreen()
+    endScreen = new EndScreen();
+    pufferFisch = new PufferFisch();
+
 
     statusBars = [
         new StatusBars(),
         new PoisonedBar(),
-        new coinBar()
+        new coinBar(),
     ]
 
-    poisenIcon = [new PoisenIcon(),
-    new PoisenIcon(),
-    new PoisenIcon(),
-    new PoisenIcon(),
-    new PoisenIcon(),
-    new Coins(),
+    poisenIcon = [
+        new PoisenIcon(),
+        new PoisenIcon(),
+        new PoisenIcon(),
+        new PoisenIcon(),
+        new PoisenIcon(),
+        new PoisenIcon(),
+        new PoisenIcon(),
+
+        new Coins(),
+         new Coins(),
+          new Coins(),
+           new Coins(),
+            new Coins(),
     ];
 
     throwabelObject = []
@@ -119,8 +129,8 @@ class World {
         this.addToMap(this.character)
         this.addToMap(this.endboss)
 
-
         this.ctx.translate(-this.camera_x, 0);
+
 
         self = this;
         if (self.isGameRunning) {

@@ -5,4 +5,5 @@ class KeyBindings {
     UP = false;
     DOWN = false;
     Attack = false;
+    AttackTail = false
 }

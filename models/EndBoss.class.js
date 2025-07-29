@@ -3,8 +3,9 @@ class Endboss extends MovableObject {
   width = 380;
   hasPlayed = false;
   a = 0
-  x = 1601;
+  x = 3300;
   lastAttack = 0;
+  y = -1200;
 
 
   Image_Introduce = [
@@ -53,6 +54,13 @@ class Endboss extends MovableObject {
     'img/2.Enemy/3 Final Enemy/Attack/6.png'
   ];
 
+  Image_Hurt = [
+    'img/2.Enemy/3 Final Enemy/Hurt/1.png',
+    'img/2.Enemy/3 Final Enemy/Hurt/2.png',
+    'img/2.Enemy/3 Final Enemy/Hurt/3.png',
+    'img/2.Enemy/3 Final Enemy/Hurt/4.png',
+  ]
+
   world;
 
   constructor() {
@@ -61,67 +69,60 @@ class Endboss extends MovableObject {
     this.loadImges(this.Image_Dead)
     this.loadImges(this.Image_Introduce)
     this.loadImges(this.Image_Attack)
+    this.loadImges(this.Image_Hurt)
     this.img = this.imageCache[this.Image_Swimming[0]];
     this.animate();
   }
 
-  animate() {
-    setInterval(() => {
-      if (this.world.character.x <= 1240){
-        this.y = -600
-        return
-      }else if(this.isDead()) {
-        this.playAnimation(this.Image_Dead);
-        this.world.endScreen.showGameOver();
-        return
-       }else if (this.world.character.x > 1300 && this.hasPlayed === false) {
-        disableControls(5000);
-        this.world.keyBindings.RIGHT = false
-        this.y = 30
-        this.playAnimationOnce(this.Image_Introduce);
-      } else if (this.world.character.x > this.x - 300 && !this.coolDownBoss()) {
-         this.playAnimation(this.Image_Attack)
-        this.attackBit()
-      } else if (this.x < 1600 && this.coolDownBoss()) {
-        this.goBack()
-      }else {
-        this.playAnimation(this.Image_Swimming);
-      }
-    }, 1500 / 10); // 10 FPS reicht für Dead-Animation – ggf. 60 FPS für Swimming
-  }
+ animate() {
+  setInterval(() => {
+    if (this.isDead()) {
+      this.playAnimation(this.Image_Dead);
+      this.world.endScreen.showGameOver();
+    } else if (this.world.character.x > 3000 && !this.hasIntroduced &&!this.introStarted) {
+      this.y = 30;
+      disableControls(2000);
+      this.world.keyBindings.RIGHT = false;
+      this.playIntroduceAnimation();
+    }
+  }, 1000);
+}
+
+playIntroduceAnimation() {
+  this.introStarted = true;
+  let frame = 0;
+  const totalFrames = this.Image_Introduce.length;
+  const interval = setInterval(() => {
+    if (frame < totalFrames) {
+      this.img = this.imageCache[this.Image_Introduce[frame]];
+      frame++;
+    } else {
+      clearInterval(interval);
+      this.hasIntroduced = true;
+      setTimeout(() => {
+        this.startSwimming();
+      }, 300);}}, 100);
+}
 
   attackBit() {
-    this.x = this.x - Math.random() - 10
+    this.x = this.x - Math.random() - 50;
     this.lastAttack = new Date().getTime();
   }
 
-  goBack() {
-    let intervalId = setInterval(() => {
-      if (this.x >= 2100) {
-        clearInterval(intervalId)
-        return
-      }
-      this.x = this.x + Math.random()
-    })
-
-
-  }
-
-  playAnimationOnce(images) {
-    let i = this.currentImage % images.length;
-    let path = images[i];
-    this.img = this.imageCache[path];
-    this.currentImage++;
-
-    if (this.a >= images.length) {
-      this.hasPlayed = true;
-    }
-    this.a++;
-  }
-
   coolDownBoss() {
-      let timePassed = new Date().getTime() - this.lastAttack;// difference in ms
-      timePassed = timePassed / 1000 // difference in s
-      return timePassed < 0.5;
-   }
+    let timePassed = new Date().getTime() - this.lastAttack;
+    return (timePassed / 1000) < 2;
+  }
+
+  isColliding(objekt) {
+    const offsetX = 10;
+    const offsetY = 100;
+    const hitboxWidth = this.width - 50;
+    const hitboxHeight = this.height - 130;
+
+    return this.x + offsetX < objekt.x + objekt.width &&
+      this.x + offsetX + hitboxWidth > objekt.x &&
+      this.y + offsetY < objekt.y + objekt.height &&
+      this.y + offsetY + hitboxHeight > objekt.y;
+  }
 }
