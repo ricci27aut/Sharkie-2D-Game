@@ -24,23 +24,6 @@ class DrawableOBjekt {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height)
     };
 
-    drawHitBox(ctx) {
-         if (this instanceof Character|| this instanceof Endboss) {
-      ctx.beginPath();
-      ctx.lineWidth = "5";
-      ctx.strokeStyle = "red";
-      ctx.rect(this.x + 10, this.y + 100, this.width - 50, this.height - 130);
-      ctx.stroke();
-    }
-        if (this instanceof PufferFisch || this instanceof PoisenIcon || this instanceof ThrowableObject) {
-            ctx.beginPath();
-            ctx.lineWidth = "5";
-            ctx.strokeStyle = "blue";
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
-        }
-    };
-
     resolveImageIndex(percentage) {
         if (percentage === 100) {
             return 5;

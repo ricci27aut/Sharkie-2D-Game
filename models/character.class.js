@@ -111,51 +111,57 @@ class Character extends MovableObject {
    }
 
 
+  animate() {
+   this.animateIdle();
+   this.animateMovement();
+   this.animateStatus();
+}
 
+animateIdle() {
+   setInterval(() => {
+      if (!this.world.keyBindings.RIGHT && !this.world.keyBindings.LEFT) {
+         this.playAnimation(this.Image_Waiting);
+      }
+   }, 200);
+}
 
-   animate() {
+animateMovement() {
+   setInterval(() => {
+      if (this.world.keyBindings.RIGHT && this.x < this.world.level.level_end_x) {
+         this.moveRight();
+         this.otherDirection = false;
+      }
+      if (this.world.keyBindings.LEFT && this.x > 0) {
+         this.moveLeft();
+         this.otherDirection = true;
+      }
+      if (this.world.keyBindings.Attack && this.world.shots) {
+         this.playAnimation(this.Image_Attack);
+      }
+      if (this.world.keyBindings.AttackTail && this.canAttackTail()) {
+         this.lastTailAttack = new Date().getTime();
+         this.playAnimation(this.Image_Attack_Tail);
+      }
+      if (this.world.keyBindings.SPACE && !this.isAboveGround()) {
+         this.jump();
+      }
 
-      setInterval(() => {
-         if (!this.world.keyBindings.RIGHT && !this.world.keyBindings.LEFT) {
-            this.playAnimation(this.Image_Waiting);
-         }
-      }, 200);
+      this.world.camera_x = -this.x + 100;
+   }, 900 / 60);
+}
 
-      setInterval(() => {
-         if (this.world.keyBindings.RIGHT && this.x < this.world.level.level_end_x) {
-            this.moveRight()
-            this.otherDirection = false;
-         }
-         if (this.world.keyBindings.LEFT && this.x > 0) {
-            this.moveLeft()
-            this.otherDirection = true;
-         }
-         if (this.world.keyBindings.Attack && this.world.shots) {
-            this.playAnimation(this.Image_Attack)
-         }
-         if (this.world.keyBindings.AttackTail && this.canAttackTail()) {
-            this.lastTailAttack = new Date().getTime(); // Zeit merken
-            this.playAnimation(this.Image_Attack_Tail);
-         }
-         if (this.world.keyBindings.SPACE && !this.isAboveGround()) {
-            this.jump();
-         }
-
-         this.world.camera_x = -this.x + 100;
-      }, 900 / 60);
-
-      setInterval(() => {
-
-         if (this.isDead()) {
-            this.playAnimation(this.Image_Dead_Poisoned);
-            this.world.endScreen.showGameLose();
-         } else if (this.coolDown()) {
-            this.playAnimation(this.Image_Hurt_Poisoned);
-         } else if (this.world.keyBindings.RIGHT || this.world.keyBindings.LEFT || this.world.keyBindings.SPACE) {
-            this.playAnimation(this.Image_Swimming)
-         }
-      }, 100);
-   }
+animateStatus() {
+   setInterval(() => {
+      if (this.isDead()) {
+         this.playAnimation(this.Image_Dead_Poisoned);
+         this.world.endScreen.showGameLose();
+      } else if (this.coolDown()) {
+         this.playAnimation(this.Image_Hurt_Poisoned);
+      } else if (this.world.keyBindings.RIGHT || this.world.keyBindings.LEFT || this.world.keyBindings.SPACE) {
+         this.playAnimation(this.Image_Swimming);
+      }
+   }, 150);
+}
 
    isColliding(objekt) {
       const offsetX = 10;

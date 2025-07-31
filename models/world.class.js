@@ -150,7 +150,6 @@ class World {
         }
 
         object.draw(this.ctx);
-        object.drawHitBox(this.ctx);
 
 
         if (object.otherDirection) {
